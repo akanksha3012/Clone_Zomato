@@ -9,6 +9,8 @@ import googleAuthConfig from "./config/google.config";
 
 //Routes
 import Auth from './API/Auth/index';
+import Restaurant from './API/Restaurant/index';
+import Food from './API/Food/index';
 
 //Database Connection
 import ConnectDB from './database/connection';
@@ -31,6 +33,8 @@ zomato.get("/", (req, res) => {
 });
 
 zomato.use("/auth", Auth);
+zomato.use("/food", Food);
+zomato.use("/restaurant", Restaurant);
 
 zomato.listen(4000, () => ConnectDB().then(() => console.log('Server is up and running')).catch(
     () => console.log('Server is running, but server connection failed...')
