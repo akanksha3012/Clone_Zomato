@@ -18,9 +18,7 @@ const OrderSchema = new mongoose.Schema({
            },
        },
    ],
-   orderratings: {
-       type: Number
-   },
+  
 },{
     timestamps: true
 });
