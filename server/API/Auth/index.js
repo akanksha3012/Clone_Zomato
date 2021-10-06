@@ -5,6 +5,10 @@ import passport from 'passport';
 //Model
 import {UserModel} from '../../database/user/index';
 
+
+//validation
+import {validateSignup, validateSignin} from '../../validation/auth';
+
 const Router = express.Router();
 
 /*
@@ -16,6 +20,8 @@ Method          post
 */
 Router.post("/signup", async (req, res) => {
     try{
+        await validateSignup(req.body.credentials);
+
         await UserModel.findByEmailAndPhone(req.body.credentials);
 
         const newUser = await UserModel.create(req.body.credentials);
@@ -38,6 +44,8 @@ Method          post
 */
 Router.post("/signin", async (req, res) => {
     try{
+        await validateSignin(req.body.credentials);
+
         const user = await UserModel.findByEmailAndPassword(req.body.credentials);
         const token = user.generateJwtToken();
 
@@ -50,10 +58,10 @@ Router.post("/signin", async (req, res) => {
 
 /*
 Route           /auth/google
-Desc            Signin with email and password
+Desc            route for google authentication
 Params          none
 Access          public
-Method          post
+Method          get
 */
 Router.get(
     '/google', passport.authenticate("google", {
@@ -65,11 +73,11 @@ Router.get(
 );
 
 /*
-Route           /auth/google
-Desc            Signin with email and password
+Route           /auth/google/callback
+Desc            google callback function
 Params          none
 Access          public
-Method          post
+Method          get
 */
 Router.get("/google/callback", passport.authenticate("google", {failureRedirect: "/"}),
     (req,res) => {

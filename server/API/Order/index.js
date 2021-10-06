@@ -1,5 +1,6 @@
 //libraries
 import express from "express";
+import passport from "passport";
 
 //database modal
 import {OrderModel} from "../../database/allModel";
@@ -13,7 +14,7 @@ Params          id
 Access          public
 Method          get
 */
-Router.get('/:_id', async (req, res) => {
+Router.get('/:_id', passport.authenticate('jwt', {session:false}) ,async (req, res) => {
     try{
         const {_id} = req.params;
         const getOrders = await OrderModel.findOne({user:_id});
@@ -32,7 +33,7 @@ Params          _id
 Access          public
 Method          post
 */
-Router.post('/new/:_id', async (req,res) => {
+Router.post('/new/:_id', passport.authenticate('jwt', {session:false}) , async (req,res) => {
     try{
         const {_id} = req.params;
         const {orderDetails} =req.body;
