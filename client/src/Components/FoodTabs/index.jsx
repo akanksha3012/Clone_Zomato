@@ -34,7 +34,7 @@ function MobileTabs(){
     return (<>
         <div className="lg:hidden bg-white shadow-lg px-3 fixed bottom-0 z-10 w-full flex items-center justify-between md:justify-evenly text-gray-500 border">
             {allTypes.map((items) => (
-                <Link to={`/${items.id}`} className={'w-1/4'}>
+                <Link to={`/${items.id}`} key={items.id} className={'w-1/4'}>
                     <div className={
                         type === items.id ? "flex flex-col items-center text-xl text-zomato-400" : "flex flex-col items-center text-xl"
                     }>
