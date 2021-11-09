@@ -15,6 +15,8 @@ import OrderOnline from "./pages/OrderOnline";
 import Reviews from "./pages/Reviews";
 import Menu from "./pages/Menu";
 import Photos from "./pages/Photos";
+import CheckoutLayoutHOC from "./HOC/Checkout.HOC";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
       <RestaurantLayoutHOC path="/restaurant/:id/menu" exact component={Menu} />
       <RestaurantLayoutHOC path="/restaurant/:id/reviews" exact component={Reviews} />
       <RestaurantLayoutHOC path="/restaurant/:id/photos" exact component={Photos} />
+      <CheckoutLayoutHOC path="/checkout/orders" exact component={Checkout} />
     </div>
   );
 }
