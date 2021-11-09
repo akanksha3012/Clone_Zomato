@@ -12,6 +12,9 @@ import "slick-carousel/slick/slick-theme.css";
 import {Redirect, Route} from 'react-router';
 import Overview from "./pages/Overview";
 import OrderOnline from "./pages/OrderOnline";
+import Reviews from "./pages/Reviews";
+import Menu from "./pages/Menu";
+import Photos from "./pages/Photos";
 
 function App() {
   return (
@@ -23,9 +26,9 @@ function App() {
       <RestaurantLayoutHOC path="/restaurant/:id" exact component={Temp} />
       <RestaurantLayoutHOC path="/restaurant/:id/overview" exact component={Overview} />
       <RestaurantLayoutHOC path="/restaurant/:id/order-online" exact component={OrderOnline} />
-      <RestaurantLayoutHOC path="/restaurant/:id/menu" exact component={Temp} />
-      <RestaurantLayoutHOC path="/restaurant/:id/reviews" exact component={Temp} />
-      <RestaurantLayoutHOC path="/restaurant/:id/photos" exact component={Temp} />
+      <RestaurantLayoutHOC path="/restaurant/:id/menu" exact component={Menu} />
+      <RestaurantLayoutHOC path="/restaurant/:id/reviews" exact component={Reviews} />
+      <RestaurantLayoutHOC path="/restaurant/:id/photos" exact component={Photos} />
     </div>
   );
 }

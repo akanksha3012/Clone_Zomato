@@ -17,7 +17,7 @@ function ReviewCard(props) {
               />
             </div>
             <div className="flex flex-col">
-              <h3 className="text-lg font-semibold">user</h3>
+              <h3 className="text-lg font-semibold">{props.userName}</h3>
               <small className="text-gray-500">
                 5 Reviews &#8226; 3 Followers
               </small>
