@@ -1,6 +1,10 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiTwotoneStar } from "react-icons/ai";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { getImage } from "../Redux/Reducer/Image/Image.action";
 
 function RestaurantCard(props) {
   const [image, setImage] = useState({
@@ -9,11 +13,17 @@ function RestaurantCard(props) {
   const [isPro] = useState(true);
   const [isOff] = useState(true);
 
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    props.photos &&
+      dispatch(getImage(props.photos)).then((data) =>
+        setImage(data.payload.image)
+      );
+  }, [props.photos]);
 
-  
   return (
-    <Link to={`/restaurant/123456`} className="w-full md:w-1/2 lg:w-1/3">
+    <Link to={`/restaurant/123`} className="w-full md:w-1/2 lg:w-1/3">
       <div className="bg-white p-4 mb-4 rounded-2xl transition duration-700 ease-in-out hover:shadow-lg ">
         <div className="w-full h-56 lg:h-64 relative">
           <div className="absolute w-full bottom-4 flex items-end justify-between">
