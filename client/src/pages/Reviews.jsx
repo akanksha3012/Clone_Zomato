@@ -1,36 +1,25 @@
-
 import React, { useState, useEffect } from "react";
 import ReviewCard from "../Components/Restaurant/ReviewCard";
 import AddReviewCard from "../Components/Restaurant/Reviews/AddReviewCard";
 
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { getReviews } from "../Redux/Reducer/Reviews/reviews.action";
 
 function Reviews() {
-  const [reviews, setReviews] = useState([
-      {
-    userName:"Ira",
-    isRestaurantReview: true,
-    createdAt:"2020-06-01T12:00:00.0002",
-    reviewText: "This is a must visit.",
-},
-{
-    userName:"khushi",
-    isRestaurantReview: false,
-    createdAt:"2020-06-01T12:00:00.0002",
-    reviewText: "This is a must visit.",
-},
-{
-    userName:"Alexa",
-    isRestaurantReview: true,
-    createdAt:"2020-06-01T12:00:00.0002",
-    reviewText: "This is a must visit.",
-},
-{
-    userName:"Siri",
-    isRestaurantReview: false,
-    createdAt:"2020-06-01T12:00:00.0002",
-    reviewText: "This is a must visit.",
-},
-]);
+  const [reviews, setReviews] = useState([]);
+  const reduxState = useSelector(
+    (globalStore) => globalStore.restaurant.selectedRestaurant.restaurant
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    reduxState &&
+      dispatch(getReviews(reduxState?._id)).then((data) => {
+        setReviews(data.payload.reviews);
+      });
+  }, [reduxState]);
   return (
     <>
       <div className="w-full flex flex-col md:flex-row relative gap-6">

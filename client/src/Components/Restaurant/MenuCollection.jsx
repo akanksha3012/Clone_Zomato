@@ -40,4 +40,4 @@ function MenuCollection(props) {
   );
 }
 
-export default MenuCollection;
+export default MenuCollection

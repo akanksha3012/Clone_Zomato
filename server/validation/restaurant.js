@@ -1,14 +1,17 @@
 import joi from "joi";
 
-export const validateRestaurantCity = (restaurantObj) => {
+export const ValidateRestaurantCity = (restaurantObj) => {
     const Schema = joi.object({
-        City: joi.string().required()
-    })
+        city: joi.string().required(),
+    });
+
     return Schema.validateAsync(restaurantObj);
-}
-export const validateRestaurantSearchString = (restaurantObj) => {
+};
+
+export const ValidateRestaurantSearchString = (restaurantObj) => {
     const Schema = joi.object({
-        searchString: joi.string().required()
-    })
+        searchString: joi.string().required(),
+    });
+
     return Schema.validateAsync(restaurantObj);
-}
+};

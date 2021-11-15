@@ -6,8 +6,7 @@ import passport from "passport";
 
 //configs
 import googleAuthConfig from "./config/google.config";
-import routerConfig from './config/route.config';
-
+import routerConfig from "./config/route.config";
 
 //Routes
 import Auth from "./API/Auth/index";
@@ -18,7 +17,7 @@ import Image from "./API/Image/index";
 import Order from "./API/Order/index";
 import Review from "./API/Reviews/index";
 import User from "./API/User/index";
-import MailService from "./API/Mail";
+import MailService from "./API/Mail/index";
 
 
 //Database connection
@@ -30,7 +29,6 @@ const zomato = express();
 googleAuthConfig(passport);
 routerConfig(passport);
 
-
 zomato.use(express.json());
 zomato.use(express.urlencoded({ extended: false }));
 zomato.use(cors());
@@ -39,7 +37,7 @@ zomato.use(passport.initialize());
 zomato.use(passport.session());
 
 zomato.get("/", (req, res) => {
-    res.json({ message: "Setup Success" });
+  res.json({ message: "Setup Success" });
 });
 
 zomato.use("/auth", Auth);
@@ -52,13 +50,12 @@ zomato.use("/review", Review);
 zomato.use("/user", User);
 zomato.use("/mail", MailService);
 
+
 zomato.listen(4000, () =>
-    ConnectDB()
-        .then(() => console.log("Server is up and running"))
-        .catch((error) => {
-            console.log(error);
-            console.log(
-                "Server is running, but database connection failed ..."
-            );
-        })
+  ConnectDB()
+    .then(() => console.log("Server is up and running"))
+    .catch((error) => {
+      console.log(error);
+      console.log("Server is running, but database connection failed ...");
+    })
 );

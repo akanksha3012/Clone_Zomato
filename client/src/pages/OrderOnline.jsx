@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineCompass } from "react-icons/ai";
 import { BiTimeFive } from "react-icons/bi";
 
@@ -7,27 +7,17 @@ import FloatMenuBtn from "../Components/Restaurant/OrderOnline/FloatMenuBtn";
 import FoodList from "../Components/Restaurant/OrderOnline/FoodList";
 import MenuListContainer from "../Components/Restaurant/OrderOnline/MenuListContainer";
 
-function OrderOnline() {
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { getFoodList } from "../Redux/Reducer/Food/food.action";
 
-  const [menu, setMenu] = useState([{
-    name:"Recommended",
-    items:[{
-      image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-      name:"Paneer Butter Masala",
-      price:"₹210",
-      rating:"4",
-      descript:"Bestseller",
-      
-    },"",""],
-  },
-  {
-    name:"Combos",
-    items:["","",""],
-  },
-  {
-    name:"Half and Half Combos",
-    items:["",""],
-  },]);
+function OrderOnline() {
+  const dispatch = useDispatch();
+  const reduxState = useSelector(
+    (globalStore) => globalStore.restaurant.selectedRestaurant.restaurant
+  );
+
+  const [menu, setMenu] = useState([]);
   const [selected, setSelected] = useState("Recommended");
 
   const onClickHandler = (e) => {
@@ -36,6 +26,16 @@ function OrderOnline() {
     }
     return;
   };
+  useEffect(() => {
+    if (reduxState) {
+      dispatch(getFoodList(reduxState.menu)).then((data) => {
+        if (data.payload.menus) {
+          setMenu(data.payload.menus.menus);
+        }
+      });
+    }
+  }, [reduxState]);
+
  return (
     <>
       <div className="w-full h-screen flex">

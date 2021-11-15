@@ -1,5 +1,7 @@
 //libraries
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react';
+import {useParams} from "react-router-dom";
+import {useDispatch} from "react-redux";
 //components
 import RestaurantNavbar from '../Components/Navbar/RestaurantNavbar';
 import ImageGrid from '../Components/Restaurant/ImageGrid';
@@ -12,16 +14,35 @@ import { BiBookmarkPlus } from 'react-icons/bi';
 import Tabs from '../Components/Restaurant/Tabs';
 import CartContainer from '../Components/Cart/CartContainer';
 
+import {getSpecificRestaurant} from "../Redux/Reducer/restaurant/restaurant.action";
+import {getImage} from "../Redux/Reducer/Image/Image.action";
+
 function RestaurantLayout({children}) {
+    const {id} = useParams();
+    const dispatch = useDispatch()
     const [restaurant, setRestaurant] = useState({
         images:[
         ],
-        name:"The Indo-Asian Kitchen",
-        cuisine:"North Indian, chinese, Kabab, Mughlai",
-        address:"Karol Bagh, New Delhi",
-        restaurantRating:"4.3",
-        deliveryRating:"3.5",
+        name:"",
+        cuisine:"",
+        address:"",
     });
+
+    useEffect(() => {
+        dispatch(getSpecificRestaurant(id)).then((data) => {
+            setRestaurant((prev)=>({
+                ...prev,
+                ...data.payload.restaurant,
+            }));
+            dispatch(getImage(data.payload.restaurant.photos)).then((data) => {
+                setRestaurant((prev)=> ({
+                    ...prev,
+                    ...data.payload.image,
+                }))
+            });
+        });
+        
+    },[]);
     return (
         <>
             <RestaurantNavbar/>

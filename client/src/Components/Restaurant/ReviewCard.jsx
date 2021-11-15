@@ -2,7 +2,19 @@ import React, { useState, useEffect } from "react";
 import { TiStarFullOutline } from "react-icons/ti";
 import dayjs from "dayjs";
 
+//redux
+import {useDispatch} from "react-redux";
+import {getUser} from "../../Redux/Reducer/User/user.action";
+
 function ReviewCard(props) {
+  const dispatch = useDispatch();
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    dispatch(getUser(props.user)).then((data) => {
+      setUser(data.payload.user.fullName);
+    });
+  }, []);
  
   return (
     <>
@@ -17,7 +29,7 @@ function ReviewCard(props) {
               />
             </div>
             <div className="flex flex-col">
-              <h3 className="text-lg font-semibold">{props.userName}</h3>
+              <h3 className="text-lg font-semibold">{user}</h3>
               <small className="text-gray-500">
                 5 Reviews &#8226; 3 Followers
               </small>
