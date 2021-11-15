@@ -1,23 +1,44 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 
-//icon
-import {FcGoogle} from 'react-icons/fc';
+// Icon
+import { FcGoogle } from "react-icons/fc";
 
-export default function SignIn({isOpen, setIsOpen}) {
-    const [userData,setUserData] = useState({
-        email:"",
-        password:"",
-    })
-    const handleChange = (e) => {setUserData(props => ({...ProgressEvent, [e.target.id]: e.target.value}))}
+// Redux
+import { useDispatch } from "react-redux";
+import { signIn } from "../../Redux/Reducer/Auth/auth.action";
+import { getMySelf } from "../../Redux/Reducer/User/user.action";
 
-    function closeModal() {
-    setIsOpen(false)
-    }
+export default function SignIn({ isOpen, setIsOpen }) {
+  const dispatch = useDispatch();
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setUserData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  const submit = () => {
+    setUserData({
+      email: "",
+      password: "",
+    });
+    dispatch(signIn(userData));
+
+    closeModal();
+  };
+
+  const googleSignIn = () =>
+    (window.location.href = "http://localhost:4000/auth/google");
 
   return (
     <>
-     
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -57,17 +78,15 @@ export default function SignIn({isOpen, setIsOpen}) {
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
-                >
-                </Dialog.Title>
+                ></Dialog.Title>
                 <div className="mt-2 flex flex-col gap-3 w-full">
                   <button
-                    
+                    onClick={googleSignIn}
                     className="py-2 justify-center rounded-lg flex items-center gap-2 w-full border border-gray-400 bg-white text-gray-700 hover:bg-gray-100"
                   >
                     Sign in with Google <FcGoogle />
                   </button>
                   <form className="flex flex-col gap-3">
-                   
                     <div className="w-full flex flex-col gap-2">
                       <label htmlFor="email">Email</label>
                       <input
@@ -91,7 +110,7 @@ export default function SignIn({isOpen, setIsOpen}) {
                       />
                     </div>
                     <div
-                      onClick={closeModal}
+                      onClick={submit}
                       className="w-full text-center bg-zomato-400 text-white py-2 rounded-lg"
                     >
                       Sign In
@@ -104,6 +123,5 @@ export default function SignIn({isOpen, setIsOpen}) {
         </Dialog>
       </Transition>
     </>
-  )
+  );
 }
-

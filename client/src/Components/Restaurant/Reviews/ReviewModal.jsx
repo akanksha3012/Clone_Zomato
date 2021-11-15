@@ -3,7 +3,9 @@ import { Fragment, useState } from "react";
 import Rating from "react-rating-stars-component";
 import { useParams } from "react-router-dom";
 
-
+// Redux
+import { useDispatch } from "react-redux";
+import { postReviews } from "../../../Redux/Reducer/Reviews/reviews.action";
 
 export default function ReviewModal({ isOpen, setIsOpen, ...props }) {
   const [reviewData, setReviewData] = useState({
@@ -14,7 +16,7 @@ export default function ReviewModal({ isOpen, setIsOpen, ...props }) {
     rating: 0,
   });
   const { id } = useParams();
- 
+  const dispatch = useDispatch();
 
   function closeModal() {
     setIsOpen(false);
@@ -40,6 +42,24 @@ export default function ReviewModal({ isOpen, setIsOpen, ...props }) {
       isRestaurantReview: false,
       isFoodReview: !prev.isFoodReview,
     }));
+  };
+
+  const submit = () => {
+    dispatch(
+      postReviews({
+        ...reviewData,
+        restaurant: id,
+      })
+    );
+
+    setReviewData({
+      subject: "",
+      reviewText: "",
+      isRestaurantReview: false,
+      isFoodReview: false,
+      rating: 0,
+    });
+    closeModal();
   };
 
   return (
@@ -148,7 +168,7 @@ export default function ReviewModal({ isOpen, setIsOpen, ...props }) {
                   <button
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
+                    onClick={submit}
                   >
                     Submit
                   </button>

@@ -1,27 +1,20 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageViewer from "react-simple-image-viewer";
 import PhotoCollection from "../Components/Restaurant/PhotoCollection";
 
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { getImage } from "../Redux/Reducer/Image/Image.action";
 
 function Photos() {
-  const [photos, setPhotos] = useState([
-    "https://b.zmtcdn.com/data/pictures/0/18930190/8b41602a27ac441ba909237947be73ec.jpg",
-    "https://b.zmtcdn.com/data/reviews_photos/faf/e76d6bc3df21781ca49c93dd4d4edfaf_1624699914.jpg",
-    "https://b.zmtcdn.com/data/dish_photos/e56/c6942fc1a954329fe4ed8bdf9a481e56.jpg",
-    "https://b.zmtcdn.com/data/pictures/0/18930190/8b41602a27ac441ba909237947be73ec.jpg",
-    "https://b.zmtcdn.com/data/reviews_photos/faf/e76d6bc3df21781ca49c93dd4d4edfaf_1624699914.jpg",
-    "https://b.zmtcdn.com/data/dish_photos/e56/c6942fc1a954329fe4ed8bdf9a481e56.jpg",
-    "https://b.zmtcdn.com/data/pictures/0/18930190/8b41602a27ac441ba909237947be73ec.jpg",
-    "https://b.zmtcdn.com/data/reviews_photos/faf/e76d6bc3df21781ca49c93dd4d4edfaf_1624699914.jpg",
-    "https://b.zmtcdn.com/data/dish_photos/e56/c6942fc1a954329fe4ed8bdf9a481e56.jpg",
-    "https://b.zmtcdn.com/data/pictures/0/18930190/8b41602a27ac441ba909237947be73ec.jpg",
-    "https://b.zmtcdn.com/data/reviews_photos/faf/e76d6bc3df21781ca49c93dd4d4edfaf_1624699914.jpg",
-    "https://b.zmtcdn.com/data/dish_photos/e56/c6942fc1a954329fe4ed8bdf9a481e56.jpg",
-
-  ]);
+  const [photos, setPhotos] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentImg, setCurrentImg] = useState(0);
+
+  const reduxState = useSelector(
+    (globalStore) => globalStore.restaurant.selectedRestaurant.restaurant
+  );
+  const dispatch = useDispatch();
 
   const closeViewer = () => {
     setIsMenuOpen(false);
@@ -30,6 +23,16 @@ function Photos() {
   const openViewer = (index) => {
     setIsMenuOpen(true);
   };
+
+  useEffect(() => {
+    if (reduxState) {
+      dispatch(getImage(reduxState?.photos)).then((data) => {
+        const images = [];
+        data.payload.image.images.map(({ location }) => images.push(location));
+        setPhotos(images);
+      });
+    }
+  }, [reduxState]);
 
   return (
     <>

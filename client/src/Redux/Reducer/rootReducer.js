@@ -5,6 +5,7 @@ import image from "./Image/Image.reducer";
 import review from "./Reviews/reviews.reducer";
 import user from "./User/user.reducer";
 import food from "./Food/food.reducer";
+import auth from "./Auth/auth.reducer";
 
 const rootReducer = combineReducers({
     restaurant,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     review,
     user,
     food,
+    auth,
 });
 
 export default rootReducer;
