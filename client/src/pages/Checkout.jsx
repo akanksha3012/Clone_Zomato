@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
-
 import { BsShieldLockFill } from "react-icons/bs";
+
+import Razorpay from "razorpay"
 
 // component
 import FoodItem from "../Components/Cart/FoodItem";
@@ -8,9 +9,15 @@ import AddressList from "../Components/Checkout/AddressList"
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import {createorder} from "../Redux/Reducer/Order/order.action";
 
 function Checkout() {
 
+  const reduxStateCart = useSelector((globalStore) => globalStore.cart.cart);
+  const reduxStateUser = useSelector(
+    (globalStore) => globalStore.user.user.user
+  );
+  const dispatch = useDispatch();
     const [address] = useState([
         {
           name: "Home",
@@ -27,6 +34,33 @@ function Checkout() {
       ]);
        const reduxState = useSelector((globalStore) => globalStore.cart.cart);
     
+       const payNow = () => {
+        let options = {
+          key: "rzp_test_q1aD8S4CGOEb75",
+          amount:
+            reduxStateCart.reduce((acc, curVal) => acc + curVal.totalPrice, 0) *
+            100,
+          currency: "INR",
+          name: "Zomato Clone",
+          description: "Food Payment",
+          image:
+            "https://b.zmtcdn.com/web_assets/b40b97e677bc7b2ca77c58c61db266fe1603954218.png",
+          handler: function (data) {
+            alert("Payment Done");
+           
+          },
+          prefill: {
+            name: reduxStateUser.fullName,
+            email: reduxStateUser.email,
+          },
+          theme: {
+            color: "#e23744",
+          },
+        };
+    
+        let razorPay = new window.Razorpay(options);
+        razorPay.open();
+      };
     return (
         
         <div className="my-3 flex flex-col gap-3 items-center">
@@ -51,7 +85,7 @@ function Checkout() {
                 <AddressList address={address} />
             </div>
             </div>
-            <button
+            <button onClick={payNow}
             
             className="flex items-center gap-2 justify-center my-4 md:my-8 w-full px-4 md:w-4/5 px-0 h-14 text-white font-medium text-lg bg-zomato-400 rounded-lg"
             >

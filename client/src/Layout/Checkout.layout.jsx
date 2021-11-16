@@ -1,9 +1,17 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 
 //components
 import CheckoutNavbar from '../Components/Navbar/CheckoutNavbar';
 
+import {useDispatch} from "react-redux";
+import {gerCart, getCart} from "../Redux/Reducer/Cart/cart.action";
+
+
 function CheckoutLayout(props) {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getCart());
+    },[]);
     return (
         <>
         <CheckoutNavbar/>
