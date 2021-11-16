@@ -6,7 +6,11 @@ import { BsShieldLockFill } from "react-icons/bs";
 import FoodItem from "../Components/Cart/FoodItem";
 import AddressList from "../Components/Checkout/AddressList"
 
+//redux
+import { useSelector, useDispatch } from "react-redux";
+
 function Checkout() {
+
     const [address] = useState([
         {
           name: "Home",
@@ -21,26 +25,7 @@ function Checkout() {
           address: "123 Main St, New York, NY 10001",
         },
       ]);
-      const [foods] = useState([
-        {
-            image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-            name:"Paneer Butter Masala",
-            price:"₹210",
-            quantity:"4",
-          },
-          {
-            image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-            name:"Paneer Butter Masala",
-            price:"₹210",
-            quantity:"2",
-          },
-          {
-            image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-            name:"Paneer Butter Masala",
-            price:"₹210",
-            quantity:"1",
-          }
-    ]);
+       const reduxState = useSelector((globalStore) => globalStore.cart.cart);
     
     return (
         
@@ -57,7 +42,7 @@ function Checkout() {
                 </small>
             </div>
             <div className="my-4 h-32 px-4 h-full flex flex-col gap-2 w-full md:w-3/5">
-                {foods.map((food) => (
+                {reduxState.map((food) => (
                 <FoodItem {...food} key={food._id} />
                 ))}
             </div>

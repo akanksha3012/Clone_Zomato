@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 
 //icons
 import {
@@ -8,24 +8,35 @@ import {
   } from "react-icons/io";
   import { IoCloseSharp } from "react-icons/io5";
 import FoodItem from './FoodItem';
+import { useHistory } from "react-router-dom";
+
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { getCart } from "../../Redux/Reducer/Cart/cart.action";
 
   //component
 
 
   function CartSM({ toggle }) {
+    const history = useHistory();
+    const reduxState = useSelector((globalStore) => globalStore.cart.cart);
+  
+    const continueToCheckout = () => {
+      history.push("/checkout/orders");
+    };
     return (
       <>
         <div className="md:hidden flex items-center justify-between">
           <div className="flex flex-col items-start">
             <small className="flex items-center gap-1" onClick={toggle}>
-              3 Item <IoMdArrowDropup />{" "}
+              {reduxState.length} Item <IoMdArrowDropup />{" "}
             </small>
             <h4>
-              ₹300
+            ₹{reduxState.reduce((acc, curVal) => acc + curVal.totalPrice, 0)}{" "}
               <sub>(plus tax)</sub>
             </h4>
           </div>
-          <button
+          <button onClick={continueToCheckout}
             
             className="flex items-center gap-1 bg-zomato-400 px-3 py-1 text-white rounded-lg"
           >
@@ -37,6 +48,12 @@ import FoodItem from './FoodItem';
   }
   
   function CartLg({ toggle }) {
+    const history = useHistory();
+    const reduxState = useSelector((globalStore) => globalStore.cart.cart);
+  
+    const continueToCheckout = () => {
+      history.push("/checkout/orders");
+    };
    
     return (
       <>
@@ -48,14 +65,14 @@ import FoodItem from './FoodItem';
             >
               <IoMdArrowDropup />
             </span>
-            <h4>Your Orders (3)</h4>
+            <h4>Your Orders {reduxState.length}</h4>
           </div>
           <div className="flex items-center gap-2">
             <h4 className="text-xl">
-              Subtotal: ₹300
+              Subtotal: ₹ {reduxState.reduce((acc, curVal) => acc + curVal.totalPrice, 0)}{" "}
               <sub>(plus tax)</sub>
             </h4>
-            <button
+            <button onClick={continueToCheckout}
               className="flex items-center gap-1 bg-zomato-400 px-3 py-1 text-white rounded-lg"
             >
               Continue <IoMdArrowDropright />
@@ -68,33 +85,18 @@ import FoodItem from './FoodItem';
 
 function CartContainer() {
     const [isOpen, setIsOpen] = useState(false);
-    const [cartData, setCartData] = useState([]);
-    const [foods, setFoods] = useState([
-        {
-            image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-            name:"Paneer Butter Masala",
-            price:"₹210",
-            quantity:"4",
-          },
-          {
-            image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-            name:"Paneer Butter Masala",
-            price:"₹210",
-            quantity:"2",
-          },
-          {
-            image:"https://b.zmtcdn.com/data/dish_photos/008/a478c69ce492f319690d96c16dd38008.jpg",
-            name:"Paneer Butter Masala",
-            price:"₹210",
-            quantity:"1",
-          }
-    ]);
+   
+    const dispatch = useDispatch();
+    const reduxState = useSelector((globalStore) => globalStore.cart.cart);
+  
 
     const toggleCart = () => setIsOpen((prev) => !prev);
     const closeCart = () => setIsOpen(false);
 
   return (
     <>
+    {reduxState.length && (
+      <>
           {isOpen && (
             <div className="fixed w-full overflow-y-scroll h-48 bg-white z-10 p-2 bottom-16 px-3">
               <div className="flex items-center justify-between md:px-20">
@@ -103,7 +105,7 @@ function CartContainer() {
               </div>
               <hr className="my-2" />
               <div className="flex flex-col gap-2 md:px-20">
-                {foods.map((food) => (
+                {reduxState.map((food) => (
                   <FoodItem {...food} key={food._id} />
                 ))}
               </div>
@@ -115,6 +117,8 @@ function CartContainer() {
           </div>
         
       
+    </>
+    )}
     </>
   );
 }
