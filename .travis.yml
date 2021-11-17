@@ -31,6 +31,6 @@ deploy:
   bucket_name: elasticbeanstalk-ap-south-1-746368614282,
   bucket_path: zomatoshapeai
   on:
-    branch: main
+    branch: master
   access_key_id: $AWS_KEY
   secret_access_key: $AWS_SECRET
